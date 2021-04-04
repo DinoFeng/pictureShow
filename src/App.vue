@@ -40,17 +40,23 @@
             q-item-label Twitter
             q-item-label(caption) @quasarframework
     q-page-container
-      hello-world
+      //- hello-world
+      picture-stage
+      //- folder-show
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import PictureStage from './components/PictureStage.vue'
+import FolderShow from './components/FolderShow.vue'
 
 export default {
   name: 'LayoutDefault',
 
   components: {
     HelloWorld,
+    PictureStage,
+    FolderShow,
   },
 
   data() {
