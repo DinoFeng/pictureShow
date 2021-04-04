@@ -11,7 +11,8 @@ module.exports = {
   },
 
   env: {
-    browser: true
+    browser: true,
+    node: true
   },
 
   // Rules order is important, please avoid shuffling them
@@ -26,10 +27,11 @@ module.exports = {
     'plugin:vue/essential', // Priority A: Essential (Error Prevention)
     // 'plugin:vue/strongly-recommended', // Priority B: Strongly Recommended (Improving Readability)
     // 'plugin:vue/recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
+    '@vue/prettier',
 
     // https://github.com/prettier/eslint-config-prettier#installation
     // usage with Prettier, provided by 'eslint-config-prettier'.
-    'prettier'
+    // 'prettier'
   ],
 
   plugins: [
@@ -54,6 +56,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     'prefer-promise-reject-errors': 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? ['off', { allow: ['warn', 'error'] }] : 'off',
 
 
     // allow debugger during development only

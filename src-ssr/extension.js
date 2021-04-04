@@ -11,11 +11,15 @@
  * development server, but such updates are costly since the dev-server needs a reboot.
  */
 
-module.exports.extendApp = function ({ app, ssr }) {
+const folderRouter = require('./api/folderInfo')
+
+module.exports.extendApp = ({ app, ssr }) => {
   /*
      Extend the parts of the express app that you
      want to use with development server too.
 
      Example: app.use(), app.get() etc
   */
+
+  app.use('/api', folderRouter)
 }
