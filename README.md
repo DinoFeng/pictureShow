@@ -1,0 +1,1 @@
+1. yarn create @vitejs/app pictureshow
