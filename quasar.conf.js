@@ -7,6 +7,7 @@
 // https://v1.quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = (/* ctx */) => {
   return {
@@ -69,6 +70,9 @@ module.exports = (/* ctx */) => {
       chainWebpack(chain) {
         chain.plugin('eslint-webpack-plugin').use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
       },
+
+      env: require('dotenv').config().parsed,
+
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack(cfg) {
         // cfg.module.rules.push({
@@ -90,10 +94,11 @@ module.exports = (/* ctx */) => {
         //   // }),
         //   new webpack.DefinePlugin({
         //     'process.env': {
-        //       COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash().substr(0, 7)),
-        //       VERSION: JSON.stringify(gitRevisionPlugin.version()),
-        //       BRANCH: JSON.stringify(gitRevisionPlugin.branch()),
-        //       BUILDNUMBER: JSON.stringify(process.env.BUILDNUMBER),
+        //       DEBUGGING: true,
+        //       // COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash().substr(0, 7)),
+        //       // VERSION: JSON.stringify(gitRevisionPlugin.version()),
+        //       // BRANCH: JSON.stringify(gitRevisionPlugin.branch()),
+        //       // BUILDNUMBER: JSON.stringify(process.env.BUILDNUMBER),
         //     },
         //   }),
         // )
@@ -104,7 +109,7 @@ module.exports = (/* ctx */) => {
     devServer: {
       https: false,
       port: 8080,
-      open: true, // opens browser window automatically
+      open: false, // opens browser window automatically
     },
 
     // https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
