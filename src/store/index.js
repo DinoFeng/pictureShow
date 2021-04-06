@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import errorHandle from './errorHandle'
+import app from './app'
 import pictureStage from './pictureStage'
 
 // import example from './module-example'
@@ -19,6 +20,7 @@ Vue.use(Vuex)
 export default (/* { ssrContext } */) => {
   const Store = new Vuex.Store({
     modules: {
+      app,
       errorHandle,
       pictureStage,
       // example

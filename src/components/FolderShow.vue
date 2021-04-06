@@ -1,6 +1,6 @@
 <template lang="pug">
   .q-pa-md.q-gutter-sm
-    q-tree(:nodes='folders' node-key='label')
+    q-tree(:nodes='folders' node-key='fullName')
 </template>
 
 <script>

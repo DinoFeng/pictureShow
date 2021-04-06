@@ -32,7 +32,8 @@ class FileInfoProvider {
               (stats.isSocket() && 'Socket') ||
               (stats.isSymbolicLink() && 'SymbolicLink'),
             name,
-            fullPath,
+            folderId,
+            level,
             ext: path.extname(fullPath),
           }
         })

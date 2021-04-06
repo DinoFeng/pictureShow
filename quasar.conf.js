@@ -7,10 +7,10 @@
 // https://v1.quasar.dev/quasar-cli/quasar-conf-js
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
-const webpack = require('webpack')
 
 module.exports = (/* ctx */) => {
   return {
+    preFetch: true,
     // https://v1.quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
 
@@ -44,7 +44,8 @@ module.exports = (/* ctx */) => {
       scopeHoisting: true,
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       showProgress: true,
-
+      gzip: false,
+      analyze: false,
       // this is a configuration passed on
       // to the underlying Webpack
       devtool: 'source-map',
@@ -108,7 +109,7 @@ module.exports = (/* ctx */) => {
     // Full list of options: https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      port: 8080,
+      port: 18080,
       open: false, // opens browser window automatically
     },
 
@@ -131,7 +132,7 @@ module.exports = (/* ctx */) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['LocalStorage', 'SessionStorage', 'Dialog', 'Notify'],
     },
 
     // animations: 'all', // --- includes all animations

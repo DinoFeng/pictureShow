@@ -1,5 +1,8 @@
 const state = {
-  dirInfo: null,
+  dirInfo: {},
+  curFolderId: 'sss',
+  curPath: 'fsagfdsaga',
+
   // selectedServer: null,
   // selectedDatabase: null,
   // newDatabase: [],

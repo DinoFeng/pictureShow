@@ -1,6 +1,22 @@
 import { LocalStorage, SessionStorage, dom } from 'quasar'
 import _ from 'lodash'
 const tools = {
+  convertFolderTree(orgData, folderId, path) {
+    const dirInfo = _.get(orgData, [folderId, path])
+    if (_.isArray(dirInfo)) {
+      return dirInfo
+        .filter(v => v.type === 'Directory')
+        .map(v => ({
+          label: v.name,
+          icon: 'folder',
+          lazy: true,
+          fullName: `${folderId}/${v.name}`,
+          children: this.convertFolderTree(orgData, folderId, v.level),
+        }))
+    } else {
+      return []
+    }
+  },
   // saveServerConfigToLocal(config) {
   //   LocalStorage.set('servers', JSON.stringify(config))
   // },
