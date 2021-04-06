@@ -20,3 +20,4 @@ const state = {
   // },
   // insertDocumentEvent: false,
 }
+export default state

@@ -15,7 +15,7 @@ class FileInfoProvider {
     const p = config[folderId]
     if (p) {
       const dir = path.join(p, level)
-      // logger.debug('readDir', { folderId, level, dir })
+      logger.debug('readDir', { folderId, level, dir })
       if (fs.existsSync(dir)) {
         const names = fs.readdirSync(dir)
         return names.map(name => {

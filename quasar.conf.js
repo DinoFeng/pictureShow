@@ -10,7 +10,7 @@ const ESLintPlugin = require('eslint-webpack-plugin')
 
 module.exports = (/* ctx */) => {
   return {
-    preFetch: true,
+    // preFetch: true,
     // https://v1.quasar.dev/quasar-cli/supporting-ts
     supportTS: false,
 

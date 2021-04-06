@@ -10,8 +10,9 @@ const tools = {
           label: v.name,
           icon: 'folder',
           lazy: true,
+          level: v.level,
           fullName: `${folderId}/${v.name}`,
-          children: this.convertFolderTree(orgData, folderId, v.level),
+          children: this.convertFolderTree(orgData, folderId, v.name),
         }))
     } else {
       return []
