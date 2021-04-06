@@ -27,3 +27,5 @@ See [Configuring quasar.conf.js](https://v1.quasar.dev/quasar-cli/quasar-conf-js
 
 
 1. quasar create pictureshow
+
+https://blog.csdn.net/u013755520/article/details/91448843
