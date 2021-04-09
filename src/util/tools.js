@@ -3,6 +3,7 @@ import _ from 'lodash'
 const tools = {
   convertFolderTree(orgData, folderId, path) {
     const dirInfo = _.get(orgData, [folderId, path])
+    console.debug('convertFolderTree', dirInfo)
     if (_.isArray(dirInfo)) {
       return dirInfo
         .filter(v => v.type === 'Directory')
@@ -11,8 +12,8 @@ const tools = {
           icon: 'folder',
           lazy: true,
           level: v.level,
-          fullName: `${folderId}/${v.name}`,
-          children: this.convertFolderTree(orgData, folderId, v.name),
+          fullName: `${v.level}/${v.name}`,
+          children: this.convertFolderTree(orgData, folderId, `${v.level}/${v.name}`),
         }))
     } else {
       return []

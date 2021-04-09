@@ -2,10 +2,7 @@
 q-page(:style-fn='myTweak')
   q-splitter(v-model='splitterModel', style='height: inherit')
     template(v-slot:before)
-      folder-show(
-        :folders='folderTree'
-        @lazy-load='onLazyLoad'
-        )
+      folder-show(:folders='folderTree', @lazy-load='onLazyLoad')
       //- .q-pa-md
       //-   .text-h4.q-mb-md Before
       //-   .q-my-md(v-for='n in 4' :key='n')
@@ -31,7 +28,7 @@ export default {
     FolderShow,
   },
   mounted() {
-    this.readDir({ folderId: 'c' })
+    this.readDir({ folderId: 'd' })
   },
   data: () => {
     return {
@@ -39,7 +36,7 @@ export default {
     }
   },
   computed: {
-    // ...mapState('pictureStage', ['dirInfo', 'curFolderId', 'curPath']),
+    ...mapState('pictureStage', ['curFolderId']),
     ...mapGetters('pictureStage', ['folderTree']),
   },
   methods: {
@@ -50,7 +47,10 @@ export default {
 
     onLazyLoad({ node, key, done, fail }) {
       console.debug('onLazyLoad', node)
-      this.readDir({ folderId: 'c', path: node.level ? `${node.level}\\${node.label}` : node.label }).then(() => done())
+      this.readDir({
+        folderId: this.curFolderId,
+        path: node.level ? `${node.level}\\${node.label}` : node.label,
+      }).then(() => done())
 
       // done()
       // call fail() if any error occurs
@@ -80,17 +80,17 @@ export default {
   },
   watch: {
     dirInfo: {
-      handler: function(val) {
+      handler: function (val) {
         console.debug('watch dirInfo', val)
       },
     },
     curFolderId: {
-      handler: function(val) {
+      handler: function (val) {
         console.debug('watch curFolderId', val)
       },
     },
     curPath: {
-      handler: function(val) {
+      handler: function (val) {
         console.debug('watch curPath', val)
       },
     },
