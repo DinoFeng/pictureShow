@@ -2,7 +2,11 @@
 q-page(:style-fn='myTweak')
   q-splitter(v-model='splitterModel', style='height: inherit')
     template(v-slot:before)
-      folder-show(:folders='folderTree', @lazy-load='onLazyLoad')
+      folder-show(
+        :folders='folderTree' 
+        @lazy-load='onLazyLoad'
+        @node-click='onNodeClick'
+        )
       //- .q-pa-md
       //-   .text-h4.q-mb-md Before
       //-   .q-my-md(v-for='n in 4' :key='n')
@@ -10,8 +14,14 @@ q-page(:style-fn='myTweak')
     template(v-slot:after)
       .q-pa-md
         .text-h4.q-mb-md After
-        .q-my-md(v-for='n in 2', :key='n')
-          | {{ n }}.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
+        .q-my-md
+        | {{showFileList}}
+        //- .q-my-md
+        //- | {{showDirInfo}}
+        //- .q-my-md
+        //- | {{showOtherInfo}}
+        //- .q-my-md(v-for='n in 2', :key='n')
+        //-   | {{ n }}.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
 
   //- img(
   //-   alt='Quasar logo' 
@@ -20,7 +30,7 @@ q-page(:style-fn='myTweak')
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import FolderShow from '../components/FolderShow'
 export default {
   name: 'PictureStage',
@@ -28,7 +38,7 @@ export default {
     FolderShow,
   },
   mounted() {
-    this.readDir({ folderId: 'd' })
+    this.readDir({ folderId: 'c' })
   },
   data: () => {
     return {
@@ -36,21 +46,38 @@ export default {
     }
   },
   computed: {
-    ...mapState('pictureStage', ['curFolderId']),
-    ...mapGetters('pictureStage', ['folderTree']),
+    ...mapState('pictureStage', ['curFolderId', 'curPath', 'dirInfo']),
+    ...mapGetters('pictureStage', ['folderTree', 'fileList']),
+    showFileList() {
+      return JSON.stringify(this.fileList, null, 2)
+    },
+    showDirInfo() {
+      return JSON.stringify(this.dirInfo, null, 2)
+    },
+    showOtherInfo() {
+      return JSON.stringify({ curPath: this.curPath, curFolderId: this.curFolderId }, null, 2)
+    },
   },
   methods: {
     ...mapActions('pictureStage', ['readDir']),
+    ...mapMutations('pictureStage', ['selectPath']),
     myTweak(offset) {
       return { height: offset ? `calc(100vh - ${offset}px)` : '100vh', overflow: 'auto' }
     },
-
+    onNodeClick(node) {
+      console.debug('onLazyLoad', node)
+      this.readDir({
+        folderId: this.curFolderId,
+        path: node.fullName,
+      }).then(() => this.selectPath(node.fullName))
+    },
     onLazyLoad({ node, key, done, fail }) {
       console.debug('onLazyLoad', node)
       this.readDir({
         folderId: this.curFolderId,
-        path: node.level ? `${node.level}\\${node.label}` : node.label,
+        path: node.fullName,
       }).then(() => done())
+      // .then(() => (node.lazy = true))
 
       // done()
       // call fail() if any error occurs
@@ -80,17 +107,17 @@ export default {
   },
   watch: {
     dirInfo: {
-      handler: function (val) {
+      handler: function(val) {
         console.debug('watch dirInfo', val)
       },
     },
     curFolderId: {
-      handler: function (val) {
+      handler: function(val) {
         console.debug('watch curFolderId', val)
       },
     },
     curPath: {
-      handler: function (val) {
+      handler: function(val) {
         console.debug('watch curPath', val)
       },
     },

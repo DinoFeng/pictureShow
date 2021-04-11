@@ -8,7 +8,7 @@ router.get(
   wrapAsync(async req => {
     const { folderId } = req.params
     const { path } = req.query
-    return FileInfoProvider.readDir(folderId, path || '')
+    return FileInfoProvider.readDir(folderId, path || '/')
     // encodeURIComponent
   }),
 )

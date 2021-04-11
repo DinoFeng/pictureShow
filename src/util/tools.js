@@ -10,9 +10,11 @@ const tools = {
         .map(v => ({
           label: v.name,
           icon: 'folder',
+          expandedIcon: 'folder_open',
           lazy: true,
           level: v.level,
           fullName: `${v.level}/${v.name}`,
+          // handler: node => this.$emit('nodeClick', node),
           children: this.convertFolderTree(orgData, folderId, `${v.level}/${v.name}`),
         }))
     } else {

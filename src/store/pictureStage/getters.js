@@ -7,6 +7,7 @@ const getters = {
       {
         label: state.curFolderId,
         icon: 'folder',
+        expandedIcon: 'folder_open',
         fullName: state.curFolderId,
         children: tools.convertFolderTree(state.dirInfo, state.curFolderId, '/'),
       },
@@ -14,8 +15,13 @@ const getters = {
     console.debug('folderTree', res, state.dirInfo)
     return res
   },
-  // fileList(state) {
-  //   return state.dirInfo.filter(v => v.type === 'File')
-  // },
+  fileList(state) {
+    const dirInfo = _.get(state.dirInfo, [state.curFolderId, state.curPath])
+    if (_.isArray(dirInfo)) {
+      return dirInfo.filter(v => v.type === 'File')
+    } else {
+      return []
+    }
+  },
 }
 export default getters
