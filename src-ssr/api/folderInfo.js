@@ -13,6 +13,11 @@ router.get(
   }),
 )
 
+router.get('/:folderId/readFile', async (req, res, next) => {
+  const { folderId } = req.params
+  const { path } = req.query
+  res.download(FileInfoProvider.readFile(folderId, path))
+})
 // router.get('/test', async req => {
 //   req.query
 // })

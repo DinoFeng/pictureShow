@@ -44,6 +44,19 @@ class FileInfoProvider {
       throw new Error(`config not exists key:${folderId}`)
     }
   }
+
+  static readFile(folderId, file) {
+    const config = readConfig()
+    const p = config[folderId]
+    if (p) {
+      const dir = path.join(p, file)
+      logger.debug('readDir', { folderId, file, dir })
+      if (fs.existsSync(dir)) {
+        // return fs.readFileSync(dir)
+        return dir
+      }
+    }
+  }
 }
 
 module.exports = FileInfoProvider
