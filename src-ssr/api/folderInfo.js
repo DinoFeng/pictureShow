@@ -18,6 +18,13 @@ router.get('/:folderId/readFile', async (req, res, next) => {
   const { path } = req.query
   res.download(FileInfoProvider.readFile(folderId, path))
 })
+
+router.get(
+  '/config/read',
+  wrapAsync(async (req, res, next) => {
+    return FileInfoProvider.getConfigs()
+  }),
+)
 // router.get('/test', async req => {
 //   req.query
 // })

@@ -8,6 +8,7 @@ const tools = {
       return dirInfo
         .filter(v => v.type === 'Directory')
         .map(v => ({
+          isRoot: false,
           label: v.name,
           icon: 'folder',
           expandedIcon: 'folder_open',

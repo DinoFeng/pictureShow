@@ -9,20 +9,23 @@
     infinite
     :autoplay='autoplay && 2500'
     )
+    q-carousel-slide.column.no-wrap.flex-center(
+      v-if='pictures.length===0'
+      name='none')
+      q-icon(name='tv_off' color='primary' size='56px')
     q-carousel-slide(
-      v-for='p in pictures'
+      v-for='(p,index) in pictures'
       :key='p.key'
       :name='p.key'
       )
       q-img(
         contain
+        spinner-color='red'
         :src='p.url'
         :img-class='rotate'
         )
-    //- q-carousel-slide(:name='1' img-src='https://cdn.quasar.dev/img/mountains.jpg')
-    //- q-carousel-slide(:name='2' img-src='https://cdn.quasar.dev/img/parallax1.jpg')
-    //- q-carousel-slide(:name='3' img-src='https://cdn.quasar.dev/img/parallax2.jpg')
-    //- q-carousel-slide(:name='4' img-src='https://cdn.quasar.dev/img/quasar.jpg')
+      .absolute-top.text-center
+        | [{{index+1}}/{{pictures.length}}]{{p.name}}
     template(v-slot:control)
       q-carousel-control.text-white.rounded-borders(
         position='top-right' 
@@ -65,9 +68,6 @@
           icon='reply'
           @click='turnRight'
           )
-
-
-
 </template>
 
 <script>
@@ -79,7 +79,7 @@ export default {
   },
   computed: {
     rotate() {
-      return `rotate-${this.angle} fit`
+      return `rotate-${this.angle}`
       // this.t = this.t === 'flip-horizontal' ? 'flip-vertical' : 'flip-horizontal'
       // return this.t
     },
@@ -90,7 +90,6 @@ export default {
       fullscreen: false,
       autoplay: false,
       angle: 0,
-      t: '',
     }
   },
   methods: {
@@ -110,6 +109,8 @@ export default {
       handler(v) {
         if (_.isArray(v) && v.length > 0) {
           this.slide = v[0].key
+        } else {
+          this.slide = 'none'
         }
       },
       immediate: true,
@@ -119,13 +120,7 @@ export default {
 </script>
 
 <style scoped>
-.canClick {
-  cursor: pointer;
-}
 .q-carousel__slide {
   padding: 0px;
 }
-/* span {
-  color: brown;
-} */
 </style>

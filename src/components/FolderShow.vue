@@ -1,5 +1,12 @@
 <template lang="pug">
   .q-pa-md.q-gutter-sm
+    q-select(
+      dense 
+      outlined 
+      v-model='selectedFolderId' 
+      :options='foldersId' 
+      label='Folder Choice'
+      )
     q-tree(
       ref='folderTree'
       :nodes='folders' 
@@ -18,6 +25,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 import _ from 'lodash'
 export default {
   name: 'FolderShow',
@@ -32,9 +40,14 @@ export default {
   data() {
     return {
       selected: null,
+      selectedFolderId: '',
     }
   },
+  computed: {
+    ...mapState('pictureStage', ['foldersId']),
+  },
   methods: {
+    ...mapMutations('pictureStage', ['selectFolder']),
     onLazyLoad({ node, key, done, fail }) {
       this.$emit('lazy-load', { node, key, done, fail })
     },
@@ -47,14 +60,21 @@ export default {
         return this.$refs.folderTree.isExpanded(node.fullName)
       }
     },
-    // addClickHandler(nodes) {
-    //   return nodes.map(node =>
-    //     _.merge(node, {
-    //       handler: n => this.onNodeClick(n),
-    //       children: this.addClickHandler(node.children),
-    //     }),
-    //   )
+    // onChange() {
+    //   this.$emit('rootFolderChange', this.selectedFolderId)
     // },
+  },
+  watch: {
+    selectedFolderId: {
+      handler(v) {
+        if (v) {
+          this.selectFolder(v)
+          this.$emit('rootFolderChange', v)
+          console.debug('watch selectedFolderId', v)
+        }
+      },
+      immediate: true,
+    },
   },
 }
 </script>
@@ -63,7 +83,4 @@ export default {
 .canClick {
   cursor: pointer;
 }
-/* span {
-  color: brown;
-} */
 </style>

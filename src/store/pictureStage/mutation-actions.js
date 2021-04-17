@@ -4,5 +4,10 @@ const actions = {
       commit('setDirData', { folderId, path, results })
     },
   },
+  saveReadConfigResults: {
+    handler({ commit }, results) {
+      commit('setFoldersId', results)
+    },
+  },
 }
 export default actions

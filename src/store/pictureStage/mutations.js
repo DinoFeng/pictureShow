@@ -17,5 +17,11 @@ const mutations = {
   selectPath(state, path) {
     state.curPath = path
   },
+  setFoldersId(state, foldersId) {
+    state.foldersId = foldersId
+  },
+  selectFolder(state, folderId) {
+    state.curFolderId = folderId
+  },
 }
 export default mutations

@@ -56,12 +56,17 @@ class FileInfoProvider {
     const p = config[folderId]
     if (p) {
       const dir = path.join(p, file)
-      logger.debug('readDir', { folderId, file, dir })
+      logger.debug('readFile', { folderId, file, dir })
       if (fs.existsSync(dir)) {
         // return fs.readFileSync(dir)
         return dir
       }
     }
+  }
+
+  static getConfigs() {
+    const config = readConfig()
+    return Object.keys(config)
   }
 }
 

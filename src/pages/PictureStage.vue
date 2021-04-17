@@ -6,25 +6,12 @@ q-page(:style-fn='myTweak')
         :folders='folderTree' 
         @lazy-load='onLazyLoad'
         @node-click='onNodeClick'
+        @rootFolderChange='onFolderChange'
         )
-      //- .q-pa-md
-      //-   .text-h4.q-mb-md Before
-      //-   .q-my-md(v-for='n in 4' :key='n')
-      //-     | {{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
     template(v-slot:after)
       picture-show(
-        :pictures='fileList'
+        :pictures='imageList'
         )
-      //- .q-pa-md
-      //-   .text-h4.q-mb-md After
-      //-   .q-my-md
-      //-   | {{showFileList}}
-      //-   //- .q-my-md
-      //-   //- | {{showDirInfo}}
-      //-   //- .q-my-md
-      //-   //- | {{showOtherInfo}}
-      //-   //- .q-my-md(v-for='n in 2', :key='n')
-      //-   //-   | {{ n }}.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
 
   //- img(
   //-   alt='Quasar logo' 
@@ -43,7 +30,7 @@ export default {
     PictureShow,
   },
   mounted() {
-    this.readDir({ folderId: 'f' })
+    this.readConfig()
   },
   data: () => {
     return {
@@ -51,29 +38,24 @@ export default {
     }
   },
   computed: {
-    ...mapState('pictureStage', ['curFolderId', 'curPath', 'dirInfo']),
-    ...mapGetters('pictureStage', ['folderTree', 'fileList']),
-    showFileList() {
-      return JSON.stringify(this.fileList, null, 2)
-    },
-    showDirInfo() {
-      return JSON.stringify(this.dirInfo, null, 2)
-    },
-    showOtherInfo() {
-      return JSON.stringify({ curPath: this.curPath, curFolderId: this.curFolderId }, null, 2)
-    },
+    ...mapState('pictureStage', ['curFolderId', 'foldersId']),
+    ...mapGetters('pictureStage', ['folderTree', 'imageList']),
   },
   methods: {
-    ...mapActions('pictureStage', ['readDir']),
-    ...mapMutations('pictureStage', ['selectPath']),
+    ...mapActions('pictureStage', ['readDir', 'readConfig']),
+    ...mapMutations('pictureStage', ['selectPath', 'selectFolder']),
     myTweak(offset) {
       return { height: offset ? `calc(100vh - ${offset}px)` : '100vh', overflow: 'auto' }
+    },
+    onFolderChange(folderId) {
+      console.debug('onFolderChange', folderId)
+      this.readDir({ folderId }).then(() => this.selectFolder(folderId))
     },
     onNodeClick(node) {
       console.debug('onLazyLoad', node)
       this.readDir({
         folderId: this.curFolderId,
-        path: node.fullName,
+        path: node.isRoot ? '/' : node.fullName,
       }).then(() => this.selectPath(node.fullName))
     },
     onLazyLoad({ node, key, done, fail }) {
@@ -111,21 +93,21 @@ export default {
     },
   },
   watch: {
-    dirInfo: {
-      handler: function(val) {
-        console.debug('watch dirInfo', val)
-      },
-    },
-    curFolderId: {
-      handler: function(val) {
-        console.debug('watch curFolderId', val)
-      },
-    },
-    curPath: {
-      handler: function(val) {
-        console.debug('watch curPath', val)
-      },
-    },
+    // dirInfo: {
+    //   handler: function(val) {
+    //     console.debug('watch dirInfo', val)
+    //   },
+    // },
+    // curFolderId: {
+    //   handler: function(val) {
+    //     console.debug('watch curFolderId', val)
+    //   },
+    // },
+    // curPath: {
+    //   handler: function(val) {
+    //     console.debug('watch curPath', val)
+    //   },
+    // },
   },
 }
 </script>
