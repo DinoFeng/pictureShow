@@ -12,16 +12,19 @@ q-page(:style-fn='myTweak')
       //-   .q-my-md(v-for='n in 4' :key='n')
       //-     | {{ n }}. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
     template(v-slot:after)
-      .q-pa-md
-        .text-h4.q-mb-md After
-        .q-my-md
-        | {{showFileList}}
-        //- .q-my-md
-        //- | {{showDirInfo}}
-        //- .q-my-md
-        //- | {{showOtherInfo}}
-        //- .q-my-md(v-for='n in 2', :key='n')
-        //-   | {{ n }}.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
+      picture-show(
+        :pictures='fileList'
+        )
+      //- .q-pa-md
+      //-   .text-h4.q-mb-md After
+      //-   .q-my-md
+      //-   | {{showFileList}}
+      //-   //- .q-my-md
+      //-   //- | {{showDirInfo}}
+      //-   //- .q-my-md
+      //-   //- | {{showOtherInfo}}
+      //-   //- .q-my-md(v-for='n in 2', :key='n')
+      //-   //-   | {{ n }}.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.
 
   //- img(
   //-   alt='Quasar logo' 
@@ -32,17 +35,19 @@ q-page(:style-fn='myTweak')
 <script>
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import FolderShow from '../components/FolderShow'
+import PictureShow from '../components/pictureShow'
 export default {
   name: 'PictureStage',
   components: {
     FolderShow,
+    PictureShow,
   },
   mounted() {
-    this.readDir({ folderId: 'c' })
+    this.readDir({ folderId: 'f' })
   },
   data: () => {
     return {
-      splitterModel: 50,
+      splitterModel: 25,
     }
   },
   computed: {

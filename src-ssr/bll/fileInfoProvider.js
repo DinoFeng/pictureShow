@@ -18,25 +18,31 @@ class FileInfoProvider {
       logger.debug('readDir', { folderId, level, dir })
       if (fs.existsSync(dir)) {
         const names = fs.readdirSync(dir)
-        return names.map(name => {
-          const fullPath = path.join(dir, name)
-          // logger.debug('readDir', { fullPath })
-          const stats = fs.statSync(fullPath)
-          return {
-            type:
-              (stats.isDirectory() && 'Directory') ||
-              (stats.isFile() && 'File') ||
-              (stats.isBlockDevice() && 'BlockDevice') ||
-              (stats.isCharacterDevice() && 'CharacterDevice') ||
-              (stats.isFIFO() && 'FIFO') ||
-              (stats.isSocket() && 'Socket') ||
-              (stats.isSymbolicLink() && 'SymbolicLink'),
-            name,
-            folderId,
-            level,
-            ext: path.extname(fullPath),
-          }
-        })
+        return names
+          .map(name => {
+            const fullPath = path.join(dir, name)
+            // logger.debug('readDir', { fullPath })
+            try {
+              const stats = fs.statSync(fullPath)
+              return {
+                type:
+                  (stats.isDirectory() && 'Directory') ||
+                  (stats.isFile() && 'File') ||
+                  (stats.isBlockDevice() && 'BlockDevice') ||
+                  (stats.isCharacterDevice() && 'CharacterDevice') ||
+                  (stats.isFIFO() && 'FIFO') ||
+                  (stats.isSocket() && 'Socket') ||
+                  (stats.isSymbolicLink() && 'SymbolicLink'),
+                name,
+                folderId,
+                level,
+                ext: path.extname(fullPath),
+              }
+            } catch (e) {
+              logger.error(e)
+            }
+          })
+          .filter(v => v)
       } else {
         throw new Error(`dir:'${dir}' not exists!`)
       }

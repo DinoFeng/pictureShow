@@ -18,7 +18,14 @@ const getters = {
   fileList(state) {
     const dirInfo = _.get(state.dirInfo, [state.curFolderId, state.curPath])
     if (_.isArray(dirInfo)) {
-      return dirInfo.filter(v => v.type === 'File')
+      return dirInfo
+        .filter(v => v.type === 'File')
+        .map(p =>
+          _.merge(p, {
+            key: `${p.folderId}/${p.level}/${p.name}`,
+            url: `/api/${p.folderId}/readFile?path=${encodeURIComponent(`${p.level}/${p.name}`)}`,
+          }),
+        )
     } else {
       return []
     }

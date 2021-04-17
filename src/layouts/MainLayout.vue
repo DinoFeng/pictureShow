@@ -1,6 +1,9 @@
 <template lang="pug">
 q-layout(view='hHh Lpr fFf')
-  q-header(elevated)
+  q-header(
+    elevated
+    v-model='topHeaderOpen' 
+    )
     q-toolbar
       q-btn(
         flat 
@@ -13,9 +16,15 @@ q-layout(view='hHh Lpr fFf')
         q-toolbar-title
           | Quasar App
         div Quasar v{{ $q.version }}
+      q-space
+      q-btn(
+        flat
+        dense
+        icon='menu'
+        @click='topHeaderOpen = !topHeaderOpen'
+        )
   q-drawer(
     v-model='leftDrawerOpen' 
-    show-if-above 
     bordered 
     content-class='bg-grey-1'
     )
@@ -87,6 +96,7 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData,
+      topHeaderOpen: true,
     }
   },
 }
