@@ -4,9 +4,14 @@ const actions = {
       commit('setDirData', { folderId, path, results })
     },
   },
-  saveReadConfigResults: {
-    handler({ commit }, results) {
-      commit('setFoldersId', results)
+  doSetDirs: {
+    handler({ commit }, { path, result }) {
+      commit('setDirs', { path, result })
+    },
+  },
+  doSetDrivers: {
+    handler({ commit }, result) {
+      commit('setDrivers', result)
     },
   },
 }

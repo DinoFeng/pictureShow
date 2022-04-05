@@ -1,7 +1,7 @@
 const state = {
   dirInfo: {},
-  curFolderId: '',
+  currentDriver: '',
   curPath: '',
-  foldersId: [],
+  drivers: [],
 }
 export default state

@@ -1,24 +1,24 @@
 import _ from 'lodash'
 import tools from '../../util/tools'
 const getters = {
-  folderTree(state) {
-    // return getFolderTree(state, state.curFolderId, '/')
-    const res = [
-      {
-        label: state.curFolderId,
-        icon: 'folder',
-        expandedIcon: 'folder_open',
-        fullName: state.curFolderId,
-        level: '/',
-        isRoot: true,
-        children: tools.convertFolderTree(state.dirInfo, state.curFolderId, '/'),
-      },
-    ] // state.dirInfo[state.curFolderId]
-    console.debug('folderTree', res, state.dirInfo)
-    return res
-  },
+  // folderTree(state) {
+  //   // return getFolderTree(state, state.currentDriver, '/')
+  //   const res = [
+  //     {
+  //       label: state.currentDriver,
+  //       icon: 'folder',
+  //       expandedIcon: 'folder_open',
+  //       fullName: state.currentDriver,
+  //       level: '/',
+  //       isRoot: true,
+  //       children: tools.convertFolderTree(state.dirInfo, state.currentDriver, '/'),
+  //     },
+  //   ] // state.dirInfo[state.currentDriver]
+  //   console.debug('folderTree', res, state.dirInfo)
+  //   return res
+  // },
   fileList(state) {
-    const dirInfo = _.get(state.dirInfo, [state.curFolderId, state.curPath])
+    const dirInfo = _.get(state.dirInfo, [state.currentDriver, state.curPath])
     if (_.isArray(dirInfo)) {
       return dirInfo
         .filter(v => v.type === 'File')
@@ -33,7 +33,7 @@ const getters = {
     }
   },
   imageList(state) {
-    const dirInfo = _.get(state.dirInfo, [state.curFolderId, state.curPath])
+    const dirInfo = _.get(state.dirInfo, [state.currentDriver, state.curPath])
     if (_.isArray(dirInfo)) {
       return dirInfo
         .filter(v => v.type === 'File')
