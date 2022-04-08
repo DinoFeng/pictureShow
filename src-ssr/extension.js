@@ -11,7 +11,8 @@
  * development server, but such updates are costly since the dev-server needs a reboot.
  */
 
-const folderRouter = require('./api/folderInfo')
+// const folderRouter = require('./api-router/folderInfo')
+const router = require('./api-router')
 
 module.exports.extendApp = ({ app, ssr }) => {
   /*
@@ -21,5 +22,5 @@ module.exports.extendApp = ({ app, ssr }) => {
      Example: app.use(), app.get() etc
   */
 
-  app.use('/api', folderRouter)
+  app.use('/api', router)
 }

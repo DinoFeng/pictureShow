@@ -14,7 +14,7 @@ const actions = {
   //   return data
   // },
   async getDirs({ path }, context) {
-    const api = new API(`api/getDirs/{path}`, { pathParams: { path } })
+    const api = new API(`api/fs/getDirs/{path}`, { pathParams: { path } })
     const data = await api.fetch(false)
     if (context) {
       _.merge(context, { durationMs: api.durationMs })
@@ -23,7 +23,7 @@ const actions = {
     return data
   },
   async getDrivers(context) {
-    const api = new API(`api/getDrivers`, {})
+    const api = new API(`api/fs/getDrivers`, {})
     const data = await api.fetch(false)
     if (context) {
       _.merge(context, { durationMs: api.durationMs })

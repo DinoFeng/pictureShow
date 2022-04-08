@@ -1,6 +1,11 @@
 const _ = require('lodash')
 const A_MOMENT = 5000
 const tools = {
+  trimEndStr(v, s) {
+    const reg = RegExp(`^(.*)${s}$`, 'i')
+    return _.replace(v, reg, '$1')
+  },
+
   async genArrayAsync(size, fun) {
     const f = _.isFunction(fun) ? fun : () => null
     return Promise.all(

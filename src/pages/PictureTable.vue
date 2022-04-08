@@ -1,21 +1,21 @@
 <template lang="pug">
 q-page(:style-fn='myTweak')
-  q-splitter(v-model='splitterModel', style='height: inherit')
+  q-splitter(horizontal v-model='splitterModel', style='height: inherit')
     template(v-slot:before)
-      folder-show(:drivers='drivers', :getFoldersFun='getDirs', @images-load='onImagesLoad')
+      sql-editor(:drivers='drivers', :getFoldersFun='getDirs', @images-load='onImagesLoad')
     template(v-slot:after)
-      picture-show(:pictures='imageList')
+      table-show(:pictures='imageList')
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import FolderShow from '../components/FolderShow'
-import PictureShow from '../components/pictureShow'
+import SqlEditor from '../components/SqlEditor'
+import TableShow from '../components/TableShow'
 export default {
   name: 'PictureStage',
   components: {
-    FolderShow,
-    PictureShow,
+    SqlEditor,
+    TableShow,
   },
   mounted() {
     this.getDrivers()
@@ -31,7 +31,7 @@ export default {
     imageList() {
       return this.images.map(p => ({
         key: p.fullPath,
-        url: `/api/fs/images/${p.fullPath}`,
+        url: `/api/images/${p.fullPath}`,
       }))
     },
   },

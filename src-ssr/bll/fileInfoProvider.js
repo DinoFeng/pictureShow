@@ -60,14 +60,6 @@ class FileInfoProvider {
     }
   }
 
-  // static getFiles(dir) {
-  //   console.debug(dir)
-  //   if (fs.existsSync(dir)) {
-  //     return fs.readFileSync(dir).map(name => path.join(dir, name))
-  //     // return dir
-  //   }
-  // }
-
   // static readDir(folderId, level) {
   //   const config = readConfig()
   //   const p = config[folderId]
