@@ -1,10 +1,15 @@
 <template lang="pug">
   .q-pa-md.q-gutter-sm
     sticky-header-table(
+      style="height: 400px"
       :data='rows',
+      :columns='columns'
       :table-header-style='{ backgroundColor: "#eee" }',
-      row-key='_id',
-      hide-bottom
+      row-key="id"
+      :pagination.sync="pagination"
+      :loading="loading"
+      @request="onRequest"
+      binary-state-sort
     )
 
 </template>
@@ -16,76 +21,93 @@ export default {
   name: 'TableShow',
   components: { stickyHeaderTable },
   props: {
-    drivers: Array,
-    getFoldersFun: Function,
+    rows: Array,
+    total: Number,
+    pageSize: Number,
+    loading: Boolean,
   },
   data() {
     return {
-      selectedFolder: null,
-      expandedNodes: [],
-      selectedDriver: '',
-      dirsData: {},
-      filesData: {},
-      imagesData: {},
+      pagination: {
+        sortBy: 'desc',
+        descending: false,
+        page: 1,
+        rowsPerPage: this.pageSize,
+        rowsNumber: 10,
+      },
     }
   },
   computed: {
-    rows() {
-      return []
-    },
     columns() {
-      return {}
+      const row = _.get(this.rows, [0]) || {}
+      const cols = Object.keys(row).map(name => ({
+        name,
+        label: name, //_.startCase(name),
+        align: 'left',
+        field: name,
+        // field: row => {
+        //   if (!_.isUndefined(row[name])) {
+        //     // return row[name].display()
+        //   } else {
+        //     return undefined
+        //   }
+        // },
+      }))
+      console.debug(cols)
+      return cols
     },
   },
   methods: {
-    getChildren(folder) {
-      const dirInfo = _.get(this.dirsData, [folder]) || []
-      if (_.isArray(dirInfo)) {
-        return dirInfo.map(v => ({
-          isRoot: false,
-          label: v.name,
-          icon: 'folder',
-          expandedIcon: 'folder_open',
-          lazy: true,
-          fullName: `${v.fullPath}`,
-          children: this.getChildren(v.fullPath),
-        }))
-      } else {
-        return []
-      }
+    onRequest(props) {
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      const filter = props.filter
+      this.$emit('changedPage', { page, pageSize: rowsPerPage })
+
+      // // update rowsCount with appropriate value
+      // this.pagination.rowsNumber = this.getRowsNumberCount(filter)
+
+      // // get all rows if "All" (0) is selected
+      // const fetchCount = rowsPerPage === 0 ? this.pagination.rowsNumber : rowsPerPage
+
+      // // calculate starting row of data
+      // const startRow = (page - 1) * rowsPerPage
+
+      // // fetch data from "server"
+      // const returnedData = this.fetchFromServerFun()
+
+      // // clear out existing data and add new
+      // this.data.splice(0, this.data.length, ...returnedData)
+
+      // don't forget to update local pagination object
+      this.pagination.page = page
+      this.pagination.rowsPerPage = rowsPerPage
+      this.pagination.sortBy = sortBy
+      this.pagination.descending = descending
+
+      this.$emit('update:pageSize', rowsPerPage)
+      // // ...and turn of loading indicator
     },
-    onLazyLoad({ node, key, done, fail }) {
-      this.loadFolders(node.fullName).then(() => done())
-      // this.$emit('lazy-load', { node, key, done, fail })
-    },
-    onNodeClick(node) {
-      this.$emit('node-click', node)
-      this.loadFolders(node.fullName)
-    },
-    isExpanded(node) {
-      return this.expandedNodes.findIndex(v => v === node.fullName) >= 0
-    },
-    async loadFolders(path) {
-      this.getFoldersFun(path).then(result => {
-        const dirs = result.filter(v => v.type === 'Directory')
-        const files = result.filter(v => v.type === 'File')
-        this.dirsData = _.merge({}, this.dirsData, { [path]: dirs })
-        this.filesData = _.merge({}, this.dirsData, { [path]: files })
-        const imageList = files.filter(v => this.imageExts.includes(v.ext.toLowerCase()))
-        this.imagesData = _.merge({}, this.dirsData, { [path]: imageList })
-        this.$emit('images-load', imageList)
-        this.expandedNodes = Array.from(new Set([...this.expandedNodes, path]))
-      })
-    },
+    // onScroll({ to, ref }) {
+    //   const lastIndex = this.data.length - 1
+
+    //   if (this.loading !== true && this.nextPage < lastPage && to === lastIndex) {
+    //     this.loading = true
+
+    //     setTimeout(() => {
+    //       this.nextPage++
+    //       this.$nextTick(() => {
+    //         ref.refresh()
+    //         this.loading = false
+    //       })
+    //     }, 500)
+    //   }
+    // },
   },
   watch: {
-    selectedDriver: {
+    total: {
       handler(v) {
-        if (v) {
-          this.$emit('driverChanged', v)
-          console.debug('watch selectedDriver', v)
-          this.loadFolders(v)
-        }
+        console.debug({ v })
+        this.pagination = _.merge({}, this.pagination, { rowsNumber: Math.ceil(v / this.pagination.rowsPerPage) })
       },
       immediate: true,
     },
@@ -96,13 +118,5 @@ export default {
 <style scoped>
 .canClick {
   cursor: pointer;
-}
-.spanStyle {
-  white-space: nowrap; /*强制span不换行*/
-  /* display: inline-block; 将span当做块级元素对待 */
-  /* width: 32px; 限制宽度 */
-  /* overflow: hidden; 超出宽度部分隐藏 */
-  /* text-overflow: ellipsis; 超出部分以点号代替 */
-  line-height: 0.9; /*数字与之前的文字对齐*/
 }
 </style>

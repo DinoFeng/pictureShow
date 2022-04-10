@@ -27,5 +27,8 @@ const mutations = {
     console.debug({ path, result })
     state.dirInfo = _.merge({}, state.dirInfo, { [path]: result })
   },
+  setExcuteResult(state, result) {
+    state.excuteResult = result
+  },
 }
 export default mutations

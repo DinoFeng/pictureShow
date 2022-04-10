@@ -13,6 +13,7 @@
 
 // const folderRouter = require('./api-router/folderInfo')
 const router = require('./api-router')
+const bodyParser = require('body-parser')
 
 module.exports.extendApp = ({ app, ssr }) => {
   /*
@@ -21,6 +22,7 @@ module.exports.extendApp = ({ app, ssr }) => {
 
      Example: app.use(), app.get() etc
   */
-
+  app.use(bodyParser.json({ limit: '10mb' }))
+  app.use(bodyParser.urlencoded({ extended: false }))
   app.use('/api', router)
 }

@@ -31,6 +31,15 @@ const actions = {
     console.debug(`getDrivers durationMs:${api.durationMs} result is:`, data)
     return data
   },
+  async excuteSQL(post, context) {
+    const api = new API(`api/db/excute`, { post })
+    const data = await api.fetch(false)
+    if (context) {
+      _.merge(context, { durationMs: api.durationMs })
+    }
+    console.debug(`excuteSQL durationMs:${api.durationMs} result is:`, data)
+    return data
+  },
 }
 
 export default actions

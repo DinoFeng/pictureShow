@@ -6,13 +6,14 @@
       :minLines='18'
       mode='sql'
       theme="tomorrow"
+      @run='onRun'
       )
 
 </template>
 
 <script>
 import _ from 'lodash'
-import aceEditor from './ace-editor'
+import aceEditor from './aceEditor'
 export default {
   name: 'SqlEditor',
   components: { aceEditor },
@@ -23,8 +24,20 @@ export default {
     }
   },
   computed: {},
-  methods: {},
-  watch: {},
+  methods: {
+    onRun() {
+      // console.debug('RUN')
+      this.$emit('run', this.editing)
+    },
+  },
+  watch: {
+    // editing: {
+    //   handler(v) {
+    //     console.debug({ v })
+    //   },
+    //   immediate: true,
+    // },
+  },
 }
 </script>
 

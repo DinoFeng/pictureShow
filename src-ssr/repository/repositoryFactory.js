@@ -3,7 +3,8 @@ const path = require('path')
 const _ = require('lodash')
 const tools = require('../util/tools')
 
-const repositories = fs.readdirSync(path.resolve(__dirname))
+const repositories = fs
+  .readdirSync(path.resolve(__dirname))
   .filter(item => _.endsWith(item, '.js'))
   .map(item => tools.trimEndStr(item, '.js'))
   .filter(item => !['repositoryFactory', 'iRepository', 'dao'].includes(item))

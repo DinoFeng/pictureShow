@@ -14,5 +14,10 @@ const actions = {
       commit('setDrivers', result)
     },
   },
+  doSetExcuteResult: {
+    handler({ commit }, result) {
+      commit('setExcuteResult', result)
+    },
+  },
 }
 export default actions

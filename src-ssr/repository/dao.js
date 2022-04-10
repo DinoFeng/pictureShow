@@ -18,7 +18,7 @@ class DAO {
   constructor(dbFile) {
     return new Promise((resolve, reject) => {
       this[_dbFile] = dbFile || ':memory:'
-      this.db = new sqlite3.Database(this.dbFile, (error) => {
+      this.db = new sqlite3.Database(this.dbFile, error => {
         if (error) {
           logger.error('Could not connect to database', error)
           reject(error)
@@ -37,7 +37,7 @@ class DAO {
   run(sql, params = []) {
     return new Promise((resolve, reject) => {
       return this.db.serialize(() => {
-        return this.db.run(sql, params, function (err) {
+        return this.db.run(sql, params, function(err) {
           if (err) {
             logger.error(`Error running sql:[${sql}], params:[${params}], `)
             logger.error(err)

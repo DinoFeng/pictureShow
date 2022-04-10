@@ -2,9 +2,16 @@
 q-page(:style-fn='myTweak')
   q-splitter(horizontal v-model='splitterModel', style='height: inherit')
     template(v-slot:before)
-      sql-editor(:drivers='drivers', :getFoldersFun='getDirs', @images-load='onImagesLoad')
+      sql-editor(@run='onRun')
     template(v-slot:after)
-      table-show(:pictures='imageList')
+      table-show(
+        :rows='excuteResult.rows'
+        :total='excuteResult.total'
+        :pageSize='pageSize'
+        :loading='loading'
+        @changedPage='onPageChanged'
+        @update:pageSize="val=>pageSize=val"
+        )
 </template>
 
 <script>
@@ -17,32 +24,36 @@ export default {
     SqlEditor,
     TableShow,
   },
-  mounted() {
-    this.getDrivers()
-  },
+  mounted() {},
   data: () => {
     return {
       splitterModel: 25,
-      images: [],
+      excuteResult: { total: 0, rows: [] },
+      sql: '',
+      pageSize: 10,
+      loading: false,
     }
   },
-  computed: {
-    ...mapState('pictureStage', ['drivers']),
-    imageList() {
-      return this.images.map(p => ({
-        key: p.fullPath,
-        url: `/api/images/${p.fullPath}`,
-      }))
-    },
-  },
+  computed: {},
   methods: {
-    ...mapActions('pictureStage', ['getDrivers', 'getDirs']),
+    ...mapActions('pictureStage', ['excuteSQL']),
+    // ...mapActions('pictureStage', ['getDrivers', 'getDirs']),
     myTweak(offset) {
       return { height: offset ? `calc(100vh - ${offset}px)` : '100vh', overflow: 'auto' }
     },
-    onImagesLoad(imageList) {
-      console.debug('onImagesLoad', imageList)
-      this.images = imageList
+    onRun(sql) {
+      console.debug(sql)
+      this.sql = sql
+      this.loading = true
+      this.excuteSQL({ sql, pageSize: this.pageSize }).then(result => {
+        this.excuteResult = result
+        this.loading = false
+      })
+    },
+    onPageChanged({ page, pageSize }) {
+      this.excuteSQL({ sql: this.sql, page, pageSize }).then(result => {
+        this.excuteResult = result
+      })
     },
   },
 }

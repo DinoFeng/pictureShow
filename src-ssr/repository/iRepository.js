@@ -38,7 +38,7 @@ class BaseRepository {
 
   [_genSaveSQL](data) {
     return `INSERT OR REPLACE INTO ${this.tableName} (${[...Object.keys(data), 'updatedAt'].join(',')})
-    VALUES (${[...('?'.repeat(Object.keys(data).length).split('')), "datetime('now')"].join(',')})`
+    VALUES (${[...'?'.repeat(Object.keys(data).length).split(''), "datetime('now')"].join(',')})`
   }
 
   [_alignFields](datas) {
@@ -46,7 +46,7 @@ class BaseRepository {
     let isAligned = true
     for (const data of datas) {
       base = _.merge(base, data)
-      isAligned = (Object.keys(base).length === Object.keys(data).length)
+      isAligned = Object.keys(base).length === Object.keys(data).length
     }
     if (!isAligned) {
       base = Object.keys(base).reduce((pre, cur) => {
@@ -63,11 +63,13 @@ class BaseRepository {
 
     const fields = Object.keys(saveDatas[0])
     fields.push('updatedAt')
-    const selectValues = datas.map(data => {
-      const fieldsSQL = Object.keys(data).map(k => `? AS ${k}`)
-      fieldsSQL.push("datetime('now') AS updatedAt")
-      return `SELECT ${fieldsSQL.join(', ')}`
-    }).join('\n UNION ')
+    const selectValues = datas
+      .map(data => {
+        const fieldsSQL = Object.keys(data).map(k => `? AS ${k}`)
+        fieldsSQL.push("datetime('now') AS updatedAt")
+        return `SELECT ${fieldsSQL.join(', ')}`
+      })
+      .join('\n UNION ')
     const sql = `INSERT OR REPLACE INTO ${this.tableName} (${fields.join(',')}) 
     ${selectValues}
     `
@@ -89,34 +91,36 @@ class BaseRepository {
   async create(data) {
     return this[_dao].run(
       `INSERT INTO ${this.tableName} (${[...Object.keys(data), 'updatedAt'].join(',')})
-      VALUES (${[...('?'.repeat(Object.keys(data).length).split('')), "datetime('now')"].join(',')})`,
-      Object.values(data))
+      VALUES (${[...'?'.repeat(Object.keys(data).length).split(''), "datetime('now')"].join(',')})`,
+      Object.values(data),
+    )
   }
 
   async update(id, updated) {
     const data = _.omit(updated, ['id']) // id不更新
     return this[_dao].run(
       `UPDATE ${this.tableName}
-        ${Object.keys(data).map(k => `${k}=?`).join(',')}
+        ${Object.keys(data)
+          .map(k => `${k}=?`)
+          .join(',')}
         WHERE id=?`,
-      [...Object.values(data), id])
+      [...Object.values(data), id],
+    )
   }
 
   async batchUpdate(ids, updated) {
     const data = _.omit(updated, ['id']) // id不更新
     const sql = `UPDATE ${this.tableName}
         SET updatedAt = datetime('now'),
-        ${Object.keys(data).map(k => `${k}=?`).join(',')}
+        ${Object.keys(data)
+          .map(k => `${k}=?`)
+          .join(',')}
         WHERE id in (${ids.map(() => '?').join(',')})`
-    return this[_dao].run(sql,
-      [...Object.values(data), ...ids])
+    return this[_dao].run(sql, [...Object.values(data), ...ids])
   }
 
   async delete(id) {
-    return this[_dao].run(
-      `DELETE FROM ${this.tableName} WHERE id = ?`,
-      [id],
-    )
+    return this[_dao].run(`DELETE FROM ${this.tableName} WHERE id = ?`, [id])
   }
 
   async [_genCondition](condition) {

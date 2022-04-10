@@ -1,20 +1,20 @@
 import gobalAction from '../../util/gobalAction'
 const actions = {
-  async readDir({ commit, dispatch }, { folderId, path }) {
-    try {
-      commit('app/setLoading', 1, { root: true })
-      const context = {}
-      const results = await gobalAction.readDir({ folderId, path }, context)
-      dispatch('saveReadDirResults', { folderId, path, results })
-      dispatch('app/logDurationMs', context.durationMs, { root: true })
-      return results
-    } catch (error) {
-      dispatch('errorHandle/doPushError', { error }, { root: true })
-      throw error
-    } finally {
-      commit('app/setLoading', -1, { root: true })
-    }
-  },
+  // async readDir({ commit, dispatch }, { folderId, path }) {
+  //   try {
+  //     commit('app/setLoading', 1, { root: true })
+  //     const context = {}
+  //     const results = await gobalAction.readDir({ folderId, path }, context)
+  //     dispatch('saveReadDirResults', { folderId, path, results })
+  //     dispatch('app/logDurationMs', context.durationMs, { root: true })
+  //     return results
+  //   } catch (error) {
+  //     dispatch('errorHandle/doPushError', { error }, { root: true })
+  //     throw error
+  //   } finally {
+  //     commit('app/setLoading', -1, { root: true })
+  //   }
+  // },
 
   async getDirs({ commit, dispatch }, path) {
     try {
@@ -38,6 +38,22 @@ const actions = {
       const context = {}
       const result = await gobalAction.getDrivers(context)
       dispatch('doSetDrivers', result)
+      dispatch('app/logDurationMs', context.durationMs, { root: true })
+      return result
+    } catch (error) {
+      dispatch('errorHandle/doPushError', { error }, { root: true })
+      throw error
+    } finally {
+      commit('app/setLoading', -1, { root: true })
+    }
+  },
+
+  async excuteSQL({ commit, dispatch }, { sql, page, pageSize }) {
+    try {
+      commit('app/setLoading', 1, { root: true })
+      const context = {}
+      const result = await gobalAction.excuteSQL({ sql, page, pageSize }, context)
+      dispatch('doSetExcuteResult', result)
       dispatch('app/logDurationMs', context.durationMs, { root: true })
       return result
     } catch (error) {
