@@ -2,8 +2,8 @@
   .q-pa-md.q-gutter-sm
     ace-editor(
       v-model='editing'
-      :maxLines='28'
-      :minLines='18'
+      :maxLines='maxLines'
+      :minLines='minLines'
       mode='sql'
       theme="tomorrow"
       @run='onRun'
@@ -17,7 +17,10 @@ import aceEditor from './aceEditor'
 export default {
   name: 'SqlEditor',
   components: { aceEditor },
-  props: {},
+  props: {
+    maxLines: Number,
+    minLines: Number,
+  },
   data() {
     return {
       editing: '',

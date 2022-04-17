@@ -2,7 +2,11 @@
 q-page(:style-fn='myTweak')
   q-splitter(horizontal v-model='splitterModel', style='height: inherit')
     template(v-slot:before)
-      sql-editor(@run='onRun')
+      sql-editor(
+        :maxLines='editLines'
+        :minLines='editLines'
+        @run='onRun'
+        )
     template(v-slot:after)
       table-show(
         :rows='excuteResult.rows'
@@ -32,6 +36,8 @@ export default {
       sql: '',
       pageSize: 10,
       loading: false,
+      editLines: 10,
+      tableHeight: 400,
     }
   },
   computed: {},
@@ -54,6 +60,15 @@ export default {
       this.excuteSQL({ sql: this.sql, page, pageSize }).then(result => {
         this.excuteResult = result
       })
+    },
+  },
+  watch: {
+    splitterModel: {
+      handler(v) {
+        console.debug(`splitterModel:${v}`)
+        this.editLines = v / 2.8
+      },
+      immediate: true,
     },
   },
 }

@@ -1,16 +1,16 @@
 <template lang="pug">
-  .q-pa-md.q-gutter-sm
-    sticky-header-table(
-      style="height: 400px"
-      :data='rows',
-      :columns='columns'
-      :table-header-style='{ backgroundColor: "#eee" }',
-      row-key="id"
-      :pagination.sync="pagination"
-      :loading="loading"
-      @request="onRequest"
-      binary-state-sort
-    )
+  //- .q-pa-md.q-gutter-sm
+  sticky-header-table(
+    style="height: inherit"
+    :data='rows',
+    :columns='columns'
+    :table-header-style='{ backgroundColor: "#eee" }',
+    row-key="id"
+    :pagination.sync="pagination"
+    :loading="loading"
+    @request="onRequest"
+    binary-state-sort
+  )
 
 </template>
 
